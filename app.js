@@ -1,7 +1,16 @@
 import http from "node:http";
 import { fileURLToPath } from "node:url";
 import sirv from "sirv";
-import { attachWebSocketServer } from "./ws/attachWebSocketServer.js";
+// ============================================================================
+// WEBSOCKET BACKEND ENGINE HOOK
+// Frontends (TV, Mobile, Desktop) connect to /ws without needing to know versions.
+// Switch the active backend engine implementation below (v1 or v2):
+// ============================================================================
+import { attachWebSocketServer as attachV1 } from "./ws/v1/attachWebSocketServer.js";
+import { attachWebSocketServer as attachV2 } from "./ws/v2/attachWebSocketServer.js";
+
+// Hook your chosen engine here: attachV1 (classic broadcast) or attachV2 (targeted lines)
+const attachWebSocketServer = attachV2;
 
 const PORT = Number(process.env.PORT) || 3001;
 const publicDir = fileURLToPath(new URL("./public/", import.meta.url));
@@ -37,5 +46,5 @@ const server = http.createServer((req, res) => {
 attachWebSocketServer(server);
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`CareCall V1 Server listening on http://0.0.0.0:${PORT}`);
+  console.log(`CareCall Server listening on http://0.0.0.0:${PORT}`);
 });

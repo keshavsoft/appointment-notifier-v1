@@ -6,17 +6,9 @@ export function attachWebSocketServer(server) {
   const wss = new WebSocketServer({ noServer: true, perMessageDeflate: false });
 
   server.on("upgrade", (req, socket, head) => {
-    let pathname;
-    try {
-      const host = req.headers.host || "127.0.0.1";
-      const proto = req.headers["x-forwarded-proto"] || "http";
-      pathname = new URL(req.url, `${proto}://${host}`).pathname;
-    } catch {
-      socket.destroy();
-      return;
-    }
+    const url = new URL(req.url, "http://localhost");
 
-    if (pathname === "/ws") {
+    if (url.pathname === "/ws") {
       wss.handleUpgrade(req, socket, head, (ws) => {
         wss.emit("connection", ws, req);
       });
