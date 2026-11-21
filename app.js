@@ -1,6 +1,11 @@
 import http from "node:http";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import sirv from "sirv";
+
+if (fs.existsSync(".env")) {
+  process.loadEnvFile();
+}
 // ============================================================================
 // WEBSOCKET BACKEND ENGINE HOOK
 // Frontends (TV, Mobile, Desktop) connect to /ws without needing to know versions.
