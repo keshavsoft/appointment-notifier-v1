@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import sirv from "sirv";
 import { attachWebSocketServer } from "./ws/attachWebSocketServer.js";
 
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = Number(process.env.PORT) || 3001;
 const publicDir = fileURLToPath(new URL("./public/", import.meta.url));
 
 const serveStatic = sirv(publicDir, {
