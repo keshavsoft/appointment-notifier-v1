@@ -1,16 +1,15 @@
-import { setCurrentCall } from "../../state.js";
-import { broadcastToLine } from "../../broadcast.js";
-import { getLineCount } from "../../lines.js";
+import { setCurrentCallForKey } from "../../state.js";
+import { broadcastToKey } from "../../broadcast.js";
 
 export function handleCall(message, ws) {
-  const targetLine = message.line || ws.lineId || "1";
-  const announcement = setCurrentCall(message.number, targetLine);
+  const key = message.key || ws.key || "1";
+  const announcement = setCurrentCallForKey(key, message.number);
 
-  broadcastToLine(targetLine, {
+  broadcastToKey(key, {
     type: "state",
     cause: "call",
-    line: targetLine,
+    key,
     announcement,
-    onlineCount: getLineCount(targetLine)
-  });
+    from: message.from || ws.role || "dr"
+  }, ws);
 }

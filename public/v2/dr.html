@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="te">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#07131d">
+  <title>డాక్టర్ కన్సోల్ | CareCall V2</title>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; min-height: 100%; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Telugu", sans-serif;
+      color: #eaf3fb;
+      background: radial-gradient(circle at 50% -10%, rgba(56, 189, 248, 0.16), transparent 40%),
+                  linear-gradient(165deg, #07131d 0%, #0b1926 55%, #07111a 100%);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .app {
+      width: min(100%, 480px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 12px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand {
+      margin: 0;
+      color: #38bdf8;
+      font-size: 0.8rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .brand span { color: #34d399; }
+    h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+    .key-badge {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #38bdf8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .key-badge:active { transform: scale(0.96); }
+    .status-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .status-pill {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 4px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #94a3b8;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .status-pill i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #64748b;
+    }
+    .status-pill.connected { color: #86efac; border-color: rgba(52, 211, 153, 0.4); }
+    .status-pill.connected i { background: #34d399; box-shadow: 0 0 10px rgba(52, 211, 153, 0.8); }
+    .card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .label {
+      color: #94a3b8;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .btn-quick-next {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 999px;
+      color: #7dd3fc;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+    .number-display {
+      min-height: 64px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1;
+      border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+      text-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+    }
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .keypad button {
+      aspect-ratio: 1.55 / 1;
+      min-height: 50px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+      color: #ffffff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.1s, background 0.1s;
+    }
+    .keypad button:active {
+      transform: scale(0.94);
+      background: #0284c7;
+    }
+    .keypad .key-clear { color: #f59e0b; }
+    .keypad .key-back { color: #38bdf8; }
+    .send-button {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.4);
+      color: white;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .send-button:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .feedback {
+      min-height: 20px;
+      color: #38bdf8;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: grid; }
+    .modal-card {
+      width: min(100%, 360px);
+      background: #0b1926;
+      border: 2px solid #38bdf8;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+    .modal-title { margin: 0; font-size: 1.25rem; font-weight: 800; color: #fff; }
+    .modal-desc { margin: 0; font-size: 0.85rem; color: #94a3b8; }
+    .modal-input {
+      width: 100%;
+      height: 48px;
+      background: #07131d;
+      border: 1px solid #334e68;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 2px;
+      outline: none;
+    }
+    .modal-btn {
+      height: 46px;
+      background: #0284c7;
+      color: #fff;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <p class="brand">Care<span>Call V2</span></p>
+        <h1>డాక్టర్ కన్సోల్</h1>
+      </div>
+      <button class="key-badge" id="btnChangeKey" type="button">
+        <span>🔑 కీ:</span><b id="badgeKeyText">--</b>
+      </button>
+    </header>
+
+    <div class="status-row">
+      <span class="status-pill" id="serverStatus"><i></i>కనెక్ట్ అవుతోంది…</span>
+      <span class="status-pill" id="pairedStatus"><i></i>జత చేయబడిన స్క్రీన్స్</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="label">తదుపరి టోకెన్ · NEXT TOKEN</span>
+        <button type="button" class="btn-quick-next" id="btnQuickNext">+1 తదుపరి</button>
+      </div>
+
+      <output class="number-display" id="dialedNumber">—</output>
+
+      <div class="keypad">
+        <button type="button" data-digit="1">1</button>
+        <button type="button" data-digit="2">2</button>
+        <button type="button" data-digit="3">3</button>
+        <button type="button" data-digit="4">4</button>
+        <button type="button" data-digit="5">5</button>
+        <button type="button" data-digit="6">6</button>
+        <button type="button" data-digit="7">7</button>
+        <button type="button" data-digit="8">8</button>
+        <button type="button" data-digit="9">9</button>
+        <button type="button" class="key-clear" id="btnClear">C</button>
+        <button type="button" data-digit="0">0</button>
+        <button type="button" class="key-back" id="btnBack">⌫</button>
+      </div>
+
+      <button class="send-button" id="btnSend" type="button" disabled>
+        <span>డిస్‌ప్లేకి పంపండి</span><b>→</b>
+      </button>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="keyModal">
+    <div class="modal-card">
+      <h2 class="modal-title">🔑 డాక్టర్ కీ నమోదు చేయండి</h2>
+      <p class="modal-desc">ఈ కన్సోల్ మరియు మీ వెయిటింగ్ డిస్‌ప్లే రెండింటికీ ఒకే కీ (ఉదా: 101, 1) ఇవ్వండి.</p>
+      <input type="text" class="modal-input" id="keyInput" placeholder="ఉదా: 101" maxlength="12" />
+      <button type="button" class="modal-btn" id="btnSaveKey">కీ సేవ్ చేసి కనెక్ట్ అవ్వండి</button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var dialedNumber = document.getElementById("dialedNumber");
+    var btnSend = document.getElementById("btnSend");
+    var btnClear = document.getElementById("btnClear");
+    var btnBack = document.getElementById("btnBack");
+    var btnQuickNext = document.getElementById("btnQuickNext");
+    var serverStatus = document.getElementById("serverStatus");
+    var pairedStatus = document.getElementById("pairedStatus");
+    var badgeKeyText = document.getElementById("badgeKeyText");
+    var btnChangeKey = document.getElementById("btnChangeKey");
+    var keyModal = document.getElementById("keyModal");
+    var keyInput = document.getElementById("keyInput");
+    var btnSaveKey = document.getElementById("btnSaveKey");
+    var feedback = document.getElementById("feedback");
+
+    var currentDigits = "";
+    var currentStationKey = localStorage.getItem("carecall_v2_key") || "";
+    var socket = null;
+    var lastSentNumber = 0;
+
+    function promptKey() {
+      keyInput.value = currentStationKey || "101";
+      keyModal.classList.add("active");
+      keyInput.focus();
+    }
+
+    btnChangeKey.addEventListener("click", promptKey);
+
+    btnSaveKey.addEventListener("click", function () {
+      var val = keyInput.value.trim() || "1";
+      currentStationKey = val;
+      localStorage.setItem("carecall_v2_key", currentStationKey);
+      keyModal.classList.remove("active");
+      badgeKeyText.textContent = currentStationKey;
+      connect();
+    });
+
+    function updateView() {
+      dialedNumber.textContent = currentDigits || "—";
+      btnSend.disabled = (!currentDigits || !socket || socket.readyState !== 1);
+    }
+
+    function connect() {
+      if (!currentStationKey) {
+        promptKey();
+        return;
+      }
+      badgeKeyText.textContent = currentStationKey;
+
+      if (socket) {
+        socket.close();
+      }
+
+      var protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      var url = protocol + "//" + window.location.host + "/ws?key=" + encodeURIComponent(currentStationKey) + "&role=dr";
+      socket = new WebSocket(url);
+
+      socket.onopen = function () {
+        serverStatus.classList.add("connected");
+        serverStatus.lastChild.textContent = "సర్వర్ కనెక్ట్ అయింది";
+        updateView();
+      };
+
+      socket.onclose = function () {
+        serverStatus.classList.remove("connected");
+        serverStatus.lastChild.textContent = "డిస్‌కనెక్ట్ అయింది";
+        updateView();
+        setTimeout(connect, 2000);
+      };
+
+      socket.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        if (data.type === "presence") {
+          pairedStatus.lastChild.textContent = "ఆన్‌లైన్: " + data.onlineCount;
+        }
+      };
+    }
+
+    document.querySelectorAll("[data-digit]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (currentDigits.length < 3) {
+          currentDigits += btn.getAttribute("data-digit");
+          updateView();
+        }
+      });
+    });
+
+    btnClear.addEventListener("click", function () {
+      currentDigits = "";
+      updateView();
+    });
+
+    btnBack.addEventListener("click", function () {
+      currentDigits = currentDigits.slice(0, -1);
+      updateView();
+    });
+
+    btnQuickNext.addEventListener("click", function () {
+      var next = lastSentNumber + 1;
+      currentDigits = String(next);
+      updateView();
+    });
+
+    btnSend.addEventListener("click", function () {
+      if (!currentDigits || !socket || socket.readyState !== 1) return;
+      var num = currentDigits;
+      lastSentNumber = Number(num) || lastSentNumber;
+
+      socket.send(JSON.stringify({
+        type: "call",
+        number: num,
+        key: currentStationKey,
+        from: "dr"
+      }));
+
+      feedback.textContent = "టోకెన్ " + num + " డిస్‌ప్లేకి పంపబడింది (కీ: " + currentStationKey + ")";
+      currentDigits = "";
+      updateView();
+    });
+
+    if (!currentStationKey) {
+      promptKey();
+    } else {
+      badgeKeyText.textContent = currentStationKey;
+      connect();
+    }
+  })();
+  </script>
+</body>
+</html>

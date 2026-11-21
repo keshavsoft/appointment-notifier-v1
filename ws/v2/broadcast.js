@@ -1,8 +1,8 @@
-import { getClientsForLine, getLineCount } from "./lines.js";
+import { getClientsForKey, getClientsCountForKey } from "./keys.js";
 
-export function broadcastToLine(lineId, data, sender = null) {
+export function broadcastToKey(key, data, sender = null) {
   const payload = JSON.stringify(data);
-  const clients = getClientsForLine(lineId);
+  const clients = getClientsForKey(key);
   for (const client of clients) {
     if (client.readyState === 1 && client !== sender) {
       client.send(payload);
@@ -10,10 +10,10 @@ export function broadcastToLine(lineId, data, sender = null) {
   }
 }
 
-export function notifyLinePresence(lineId) {
-  broadcastToLine(lineId, {
+export function notifyKeyPresence(key) {
+  broadcastToKey(key, {
     type: "presence",
-    line: lineId,
-    onlineCount: getLineCount(lineId)
+    key,
+    onlineCount: getClientsCountForKey(key)
   });
 }

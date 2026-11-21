@@ -1,15 +1,15 @@
-const callsByLine = new Map();
+const callsByKey = new Map();
 
-export function getCurrentCall(lineId = "1") {
-  return callsByLine.get(lineId) || null;
+export function getCurrentCallForKey(key = "1") {
+  return callsByKey.get(key) || null;
 }
 
-export function setCurrentCall(number, lineId = "1") {
+export function setCurrentCallForKey(key = "1", number) {
   const call = {
     number,
-    line: lineId,
+    key,
     sentAt: Date.now()
   };
-  callsByLine.set(lineId, call);
+  callsByKey.set(key, call);
   return call;
 }

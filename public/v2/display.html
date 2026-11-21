@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="te">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#06101c">
+  <title>వెయిటింగ్ ఏరియా డిస్‌ప్లే | CareCall V2</title>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100vh;
+      overflow: hidden;
+      background-color: #06101c;
+      background-image: radial-gradient(ellipse at 50% 40%, #132a45 0%, #071526 60%, #030811 100%);
+      color: #ffffff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Telugu", sans-serif;
+      -webkit-user-select: none; user-select: none;
+    }
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(7, 17, 28, 0.88);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 2px solid #334e68;
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+    .status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+    }
+    .key-badge {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid #38bdf8;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7dd3fc;
+      cursor: pointer;
+    }
+    .audio-btn {
+      background: #0284c7;
+      color: #ffffff;
+      border: 2px solid #38bdf8;
+      border-radius: 999px;
+      padding: 7px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .container {
+      position: fixed;
+      top: 64px; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 20px 36px;
+    }
+    .split-left {
+      width: 50%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-right: 2px solid rgba(56, 189, 248, 0.18);
+    }
+    .token-label {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #38bdf8;
+    }
+    .token-number {
+      font-size: clamp(100px, 16vw, 240px);
+      font-weight: 900;
+      line-height: 1;
+      margin: 8px 0;
+      text-shadow: 0 16px 60px rgba(0, 0, 0, 0.95), 0 0 80px rgba(56, 189, 248, 0.3);
+    }
+    .token-spelling {
+      font-size: clamp(28px, 3.2vw, 48px);
+      font-weight: 800;
+      color: #60a5fa;
+      margin-top: 8px;
+    }
+    .split-right {
+      width: 50%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 36px;
+    }
+    .info-card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(148, 163, 184, 0.24);
+      border-radius: 28px;
+      padding: 32px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .info-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .time-label {
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .time-value {
+      font-size: clamp(24px, 2.6vw, 36px);
+      font-weight: 800;
+      color: #f1f5f9;
+    }
+    .meta-box {
+      background: rgba(7, 17, 29, 0.85);
+      border: 1px solid #334e68;
+      border-radius: 18px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .meta-key { font-size: 13px; color: #94a3b8; font-weight: 700; }
+    .meta-val { font-size: 17px; color: #38bdf8; font-weight: 800; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: grid; }
+    .modal-card {
+      width: min(100%, 400px);
+      background: #0b1926;
+      border: 2px solid #38bdf8;
+      border-radius: 20px;
+      padding: 28px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-input {
+      width: 100%;
+      height: 48px;
+      background: #07131d;
+      border: 1px solid #334e68;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-align: center;
+    }
+    .modal-btn {
+      height: 48px;
+      background: #0284c7;
+      color: #fff;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      <span id="connStatusText">డిస్‌ప్లే కనెక్ట్ అయింది</span>
+    </div>
+    <button class="key-badge" id="btnChangeKey" type="button">
+      <span>🔑 స్క్రీన్ కీ:</span> <b id="badgeKeyText">--</b>
+    </button>
+    <button class="audio-btn" id="voiceToggle" type="button">
+      🔊 వాయిస్ ఆన్
+    </button>
+  </header>
+
+  <main class="container">
+    <section class="split-left">
+      <span class="token-label">టోకెన్ నంబర్ · TOKEN</span>
+      <h1 class="token-number" id="tokenNum">--</h1>
+      <div class="token-spelling" id="tokenSpell">కాల్ కోసం వేచి ఉంది…</div>
+    </section>
+
+    <section class="split-right">
+      <div class="info-card">
+        <div class="info-title">
+          <span>🏥</span>
+          <span>ప్రస్తుత పిలుపు</span>
+        </div>
+
+        <div>
+          <span class="time-label">గడిచిన సమయం · ELAPSED TIME</span>
+          <div class="time-value" id="elapsedTime">తదుపరి కాల్ కోసం వేచి ఉంది</div>
+        </div>
+
+        <div class="meta-box">
+          <div>
+            <div class="meta-key">కన్సల్టేషన్ గది (Room)</div>
+            <div class="meta-val" id="metaRoomVal">కీ: --</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="meta-key">విభాగం (Department)</div>
+            <div class="meta-val">జనరల్ ఓపీ (General OP)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="keyModal">
+    <div class="modal-card">
+      <h2>📺 డిస్‌ప్లే కీని నమోదు చేయండి</h2>
+      <p style="color:#94a3b8; font-size:0.9rem;">డాక్టర్ కన్సోల్ ఇచ్చిన అదే కీని ఇక్కడ నమోదు చేయండి (ఉదా: 101).</p>
+      <input type="text" class="modal-input" id="keyInput" placeholder="ఉదా: 101" maxlength="12" />
+      <button type="button" class="modal-btn" id="btnSaveKey">కీ సేవ్ చేసి ప్రారంభించండి</button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var tokenNum = document.getElementById("tokenNum");
+    var tokenSpell = document.getElementById("tokenSpell");
+    var elapsedTime = document.getElementById("elapsedTime");
+    var connStatusText = document.getElementById("connStatusText");
+    var voiceToggle = document.getElementById("voiceToggle");
+    var badgeKeyText = document.getElementById("badgeKeyText");
+    var metaRoomVal = document.getElementById("metaRoomVal");
+    var btnChangeKey = document.getElementById("btnChangeKey");
+    var keyModal = document.getElementById("keyModal");
+    var keyInput = document.getElementById("keyInput");
+    var btnSaveKey = document.getElementById("btnSaveKey");
+
+    var currentStationKey = localStorage.getItem("carecall_v2_key") || "";
+    var activeCall = null;
+    var voiceEnabled = true;
+    var socket = null;
+    var audioCtx = null;
+    var audioCache = {};
+
+    var TELUGU_UNITS = [
+      "సున్నా", "ఒకటి", "రెండు", "మూడు", "నాలుగు", "ఐదు",
+      "ఆరు", "ఏడు", "ఎనిమిది", "తొమ్మిది", "పది",
+      "పదకొండు", "పన్నెండు", "పదమూడు", "పద్నాలుగు", "పదిహేను",
+      "పదహారు", "పదిహేడు", "పద్దెనిమిది", "పంతొమ్మిది"
+    ];
+
+    var TELUGU_TENS = [
+      "", "", "ఇరవై", "ముప్పై", "నలభై", "యాభై",
+      "అరవై", "డెబ్బై", "ఎనభై", "తొంభై"
+    ];
+
+    function numberToTeluguWords(num) {
+      var n = Math.floor(Number(num));
+      if (!isFinite(n) || n < 0 || n > 999) return String(num);
+      if (n < 20) return TELUGU_UNITS[n];
+      if (n < 100) {
+        var tens = Math.floor(n / 10);
+        var rem = n % 10;
+        return rem === 0 ? TELUGU_TENS[tens] : (TELUGU_TENS[tens] + " " + TELUGU_UNITS[rem]);
+      }
+      return String(num);
+    }
+
+    function promptKey() {
+      keyInput.value = currentStationKey || "101";
+      keyModal.classList.add("active");
+      keyInput.focus();
+    }
+
+    btnChangeKey.addEventListener("click", promptKey);
+
+    btnSaveKey.addEventListener("click", function () {
+      var val = keyInput.value.trim() || "1";
+      currentStationKey = val;
+      localStorage.setItem("carecall_v2_key", currentStationKey);
+      keyModal.classList.remove("active");
+      badgeKeyText.textContent = currentStationKey;
+      metaRoomVal.textContent = "కీ: " + currentStationKey;
+      connect();
+    });
+
+    function render() {
+      if (!activeCall || !activeCall.number) {
+        tokenNum.textContent = "--";
+        tokenSpell.textContent = "కాల్ కోసం వేచి ఉంది…";
+        elapsedTime.textContent = "తదుపరి కాల్ కోసం వేచి ఉంది";
+        return;
+      }
+      tokenNum.textContent = String(activeCall.number);
+      var n = Number(activeCall.number);
+      tokenSpell.textContent = numberToTeluguWords(n);
+      var sec = Math.max(0, Math.floor((Date.now() - (activeCall.sentAt || Date.now())) / 1000));
+      elapsedTime.textContent = sec + "సె క్రితం పిలవబడింది";
+    }
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        var Audio = window.AudioContext || window.webkitAudioContext;
+        if (Audio) audioCtx = new Audio();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        try { audioCtx.resume(); } catch (e) {}
+      }
+      return audioCtx;
+    }
+
+    function announceNumber(numStr) {
+      if (!voiceEnabled) return;
+      var n = Number(numStr);
+      if (!isFinite(n) || n < 1 || n > 99) return;
+      var fname = n <= 10 ? ((n < 10 ? "0" : "") + n + ".wav") : (n + ".mp3");
+      var url = "/audio/te/" + fname;
+      var ctx = getAudioContext();
+      if (!ctx) return;
+
+      if (audioCache[url]) {
+        var src = ctx.createBufferSource();
+        src.buffer = audioCache[url];
+        src.connect(ctx.destination);
+        src.start(0);
+      } else {
+        fetch(url)
+          .then(function (r) { return r.arrayBuffer(); })
+          .then(function (buf) { return ctx.decodeAudioData(buf); })
+          .then(function (decoded) {
+            audioCache[url] = decoded;
+            var src = ctx.createBufferSource();
+            src.buffer = decoded;
+            src.connect(ctx.destination);
+            src.start(0);
+          });
+      }
+    }
+
+    function connect() {
+      if (!currentStationKey) {
+        promptKey();
+        return;
+      }
+      badgeKeyText.textContent = currentStationKey;
+      metaRoomVal.textContent = "కీ: " + currentStationKey;
+
+      if (socket) {
+        socket.close();
+      }
+
+      var protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+      var url = protocol + "//" + window.location.host + "/ws?key=" + encodeURIComponent(currentStationKey) + "&role=display";
+      socket = new WebSocket(url);
+
+      socket.onopen = function () {
+        connStatusText.textContent = "డిస్‌ప్లే కనెక్ట్ అయింది";
+      };
+
+      socket.onclose = function () {
+        connStatusText.textContent = "డిస్‌కనెక్ట్ అయింది";
+        setTimeout(connect, 2000);
+      };
+
+      socket.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        if (data.type === "state" && data.announcement && data.announcement.number) {
+          activeCall = data.announcement;
+          render();
+          if (data.cause === "call") {
+            announceNumber(activeCall.number);
+          }
+        }
+      };
+    }
+
+    voiceToggle.addEventListener("click", function () {
+      voiceEnabled = !voiceEnabled;
+      voiceToggle.textContent = voiceEnabled ? "🔊 వాయిస్ ఆన్" : "🔇 వాయిస్ ఆఫ్";
+      getAudioContext();
+    });
+
+    window.addEventListener("click", getAudioContext, { passive: true });
+    window.addEventListener("keydown", getAudioContext, { passive: true });
+
+    setInterval(render, 1000);
+
+    if (!currentStationKey) {
+      promptKey();
+    } else {
+      badgeKeyText.textContent = currentStationKey;
+      metaRoomVal.textContent = "కీ: " + currentStationKey;
+      connect();
+    }
+  })();
+  </script>
+</body>
+</html>
