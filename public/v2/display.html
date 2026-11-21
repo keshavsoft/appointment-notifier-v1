@@ -311,13 +311,30 @@
 
     btnSaveKey.addEventListener("click", function () {
       var val = keyInput.value.trim() || "1";
-      currentStationKey = val;
+      changeStationKey(val);
+    });
+
+    function changeStationKey(newKey) {
+      if (!newKey) return;
+      currentStationKey = String(newKey).trim();
       localStorage.setItem("carecall_v2_key", currentStationKey);
       keyModal.classList.remove("active");
       badgeKeyText.textContent = currentStationKey;
       metaRoomVal.textContent = "కీ: " + currentStationKey;
-      connect();
-    });
+
+      activeCall = null;
+      render();
+
+      if (socket && socket.readyState === 1) {
+        socket.send(JSON.stringify({
+          type: "setKey",
+          key: currentStationKey,
+          role: "display"
+        }));
+      } else {
+        connect();
+      }
+    }
 
     function render() {
       if (!activeCall || !activeCall.number) {
@@ -381,28 +398,38 @@
       metaRoomVal.textContent = "కీ: " + currentStationKey;
 
       if (socket) {
+        socket.onclose = null;
+        socket.onerror = null;
+        socket.onmessage = null;
         socket.close();
+        socket = null;
       }
 
       var protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       var url = protocol + "//" + window.location.host + "/ws?key=" + encodeURIComponent(currentStationKey) + "&role=display";
-      socket = new WebSocket(url);
+      var ws = new WebSocket(url);
+      socket = ws;
 
-      socket.onopen = function () {
+      ws.onopen = function () {
+        if (socket !== ws) return;
         connStatusText.textContent = "డిస్‌ప్లే కనెక్ట్ అయింది";
       };
 
-      socket.onclose = function () {
+      ws.onclose = function () {
+        if (socket !== ws) return;
         connStatusText.textContent = "డిస్‌కనెక్ట్ అయింది";
-        setTimeout(connect, 2000);
+        setTimeout(function () {
+          if (socket === ws) connect();
+        }, 2000);
       };
 
-      socket.onmessage = function (event) {
+      ws.onmessage = function (event) {
+        if (socket !== ws) return;
         var data = JSON.parse(event.data);
-        if (data.type === "state" && data.announcement && data.announcement.number) {
+        if (data.type === "state") {
           activeCall = data.announcement;
           render();
-          if (data.cause === "call") {
+          if (data.cause === "call" && activeCall && activeCall.number) {
             announceNumber(activeCall.number);
           }
         }

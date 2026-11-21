@@ -3,14 +3,15 @@ const connectedKeys = new Map();
 export function registerClientKey(ws, key = "1", role = "client") {
   unregisterClientKey(ws);
 
-  ws.key = key;
-  ws.role = role;
+  const cleanKey = String(key || "1").trim();
+  ws.key = cleanKey;
+  ws.role = String(role || "client").trim();
 
-  if (!connectedKeys.has(key)) {
-    connectedKeys.set(key, new Set());
+  if (!connectedKeys.has(cleanKey)) {
+    connectedKeys.set(cleanKey, new Set());
   }
-  connectedKeys.get(key).add(ws);
-  return key;
+  connectedKeys.get(cleanKey).add(ws);
+  return cleanKey;
 }
 
 export function unregisterClientKey(ws) {
@@ -24,7 +25,8 @@ export function unregisterClientKey(ws) {
 }
 
 export function getClientsForKey(key) {
-  return connectedKeys.get(key) || new Set();
+  const cleanKey = String(key || "1").trim();
+  return connectedKeys.get(cleanKey) || new Set();
 }
 
 export function getClientsCountForKey(key) {
