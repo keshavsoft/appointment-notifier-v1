@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="te">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#06101c">
+  <title>వెయిటింగ్ ఏరియా డిస్‌ప్లే | CareCall V3</title>
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/token.css">
+  <link rel="stylesheet" href="css/infoCard.css">
+  <link rel="stylesheet" href="css/modal.css">
+</head>
+<body>
+  <header>
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      <span id="connStatusText">డిస్‌ప్లే కనెక్ట్ అయింది</span>
+    </div>
+    <button class="key-badge" id="btnChangeKey" type="button">
+      <span>🔑 స్క్రీన్ కీ:</span> <b id="badgeKeyText">--</b>
+    </button>
+    <button class="audio-btn" id="voiceToggle" type="button">
+      🔊 వాయిస్ ఆన్
+    </button>
+  </header>
+
+  <main class="display-container">
+    <section class="split-left">
+      <span class="token-label">టోకెన్ నంబర్ · TOKEN</span>
+      <h1 class="token-number" id="tokenNum">--</h1>
+      <div class="token-spelling" id="tokenSpell">కాల్ కోసం వేచి ఉంది…</div>
+    </section>
+
+    <section class="split-right">
+      <div class="info-card">
+        <div class="info-title">
+          <span>🏥</span>
+          <span>ప్రస్తుత పిలుపు</span>
+        </div>
+
+        <div>
+          <span class="time-label">గడిచిన సమయం · ELAPSED TIME</span>
+          <div class="time-value" id="elapsedTime">తదుపరి కాల్ కోసం వేచి ఉంది</div>
+        </div>
+
+        <div class="meta-box">
+          <div>
+            <div class="meta-key">కన్సల్టేషన్ గది (Room)</div>
+            <div class="meta-val" id="metaRoomVal">కీ: --</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="meta-key">విభాగం (Department)</div>
+            <div class="meta-val">జనరల్ ఓపీ (General OP)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="keyModal">
+    <div class="modal-card">
+      <h2>📺 డిస్‌ప్లే కీని నమోదు చేయండి</h2>
+      <p style="color:#94a3b8; font-size:0.9rem;">డాక్టర్ కన్సోల్ ఇచ్చిన అదే కీని ఇక్కడ నమోదు చేయండి (ఉదా: 101).</p>
+      <input type="text" class="modal-input" id="keyInput" placeholder="ఉదా: 101" maxlength="12" />
+      <button type="button" class="modal-btn" id="btnSaveKey">కీ సేవ్ చేసి ప్రారంభించండి</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/index.js"></script>
+</body>
+</html>

@@ -37,6 +37,9 @@ const server = http.createServer((req, res) => {
   // Clean, declarative route mapping
   if (path === "/v1" || path === "/v1/") req.url = "/v1/index.html";
   else if (path === "/v2" || path === "/v2/") req.url = "/v2/index.html";
+  else if (path === "/v3" || path === "/v3/") req.url = "/v3/index.html";
+  else if (path === "/v3/dr" || path === "/v3/dr/") req.url = "/v3/dr/index.html";
+  else if (path === "/v3/display" || path === "/v3/display/") req.url = "/v3/display/index.html";
   else if (path === "/tv" || path === "/tv/") req.url = "/tv/index.html";
   else if (path === "/mobile" || path === "/mobile/") req.url = "/mobile/index.html";
   else if (path === "/desktop" || path === "/desktop/") req.url = "/desktop/index.html";
