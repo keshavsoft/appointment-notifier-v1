@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="te">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#07131d">
+  <title>డాక్టర్ కన్సోల్ | CareCall V4</title>
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/header/header.css">
+  <link rel="stylesheet" href="css/status/status.css">
+  <link rel="stylesheet" href="css/keypad/card.css">
+  <link rel="stylesheet" href="css/keypad/display.css">
+  <link rel="stylesheet" href="css/keypad/grid.css">
+  <link rel="stylesheet" href="css/keypad/actions.css">
+  <link rel="stylesheet" href="css/modal/modal.css">
+</head>
+<body>
+  <div class="app" id="appContainer">
+    <header id="drHeader">
+      <div id="drBrandGroup">
+        <p class="brand" id="brandLogo">Care<span>Call V4</span></p>
+        <h1 id="drTitle">డాక్టర్ కన్సోల్</h1>
+      </div>
+      <button class="key-badge" id="btnChangeKey" type="button">
+        <span>🔑 కీ:</span><b id="badgeKeyText">--</b>
+      </button>
+    </header>
+
+    <div class="status-row" id="statusRow">
+      <span class="status-pill" id="serverStatus"><i></i>కనెక్ట్ అవుతోంది…</span>
+      <span class="status-pill" id="pairedStatus"><i></i>జత చేయబడిన స్క్రీన్స్</span>
+    </div>
+
+    <div class="card" id="dialerCard">
+      <div class="card-top" id="cardTop">
+        <span class="label" id="nextLabel">తదుపరి టోకెన్ · NEXT TOKEN</span>
+        <button type="button" class="btn-quick-next" id="btnQuickNext">+1 తదుపరి</button>
+      </div>
+
+      <output class="number-display" id="dialedNumber">—</output>
+
+      <div class="keypad" id="keypadGrid">
+        <button type="button" data-digit="1">1</button>
+        <button type="button" data-digit="2">2</button>
+        <button type="button" data-digit="3">3</button>
+        <button type="button" data-digit="4">4</button>
+        <button type="button" data-digit="5">5</button>
+        <button type="button" data-digit="6">6</button>
+        <button type="button" data-digit="7">7</button>
+        <button type="button" data-digit="8">8</button>
+        <button type="button" data-digit="9">9</button>
+        <button type="button" class="key-clear" id="btnClear">C</button>
+        <button type="button" data-digit="0">0</button>
+        <button type="button" class="key-back" id="btnBack">⌫</button>
+      </div>
+
+      <button class="send-button" id="btnSend" type="button" disabled>
+        <span>డిస్‌ప్లేకి పంపండి</span><b>→</b>
+      </button>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="keyModal">
+    <div class="modal-card" id="modalCard">
+      <h2 class="modal-title" id="modalTitle">🔑 డాక్టర్ కీ నమోదు చేయండి</h2>
+      <p class="modal-desc" id="modalDesc">ఈ కన్సోల్ మరియు మీ వెయిటింగ్ డిస్‌ప్లే రెండింటికీ ఒకే కీ (ఉదా: 101, 1) ఇవ్వండి.</p>
+      <input type="text" class="modal-input" id="keyInput" placeholder="ఉదా: 101" maxlength="12" />
+      <button type="button" class="modal-btn" id="btnSaveKey">కీ సేవ్ చేసి కనెక్ట్ అవ్వండి</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/index.js"></script>
+</body>
+</html>
