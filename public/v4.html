@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#07131d">
-  <title>CareCall V1 — Smart Clinic Queue System</title>
+  <title>CareCall V4 — Granular ID-Driven Suite</title>
   <style>
     * {
       box-sizing: border-box;
@@ -40,6 +40,40 @@
       padding: 0 32px;
       background: rgba(15, 23, 42, 0.85);
       border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 999px;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      color: #38bdf8;
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      transform: translateX(-2px);
+    }
+
+    .back-arrow {
+      font-size: 1rem;
+      line-height: 1;
     }
 
     .brand {
@@ -263,68 +297,72 @@
 
 <body>
   <header>
-    <div class="brand">
-      <span>✚</span> CareCall <span>V1</span>
+    <div class="header-left">
+      <a href="/" class="back-btn" title="Back to Home">
+        <span class="back-arrow">←</span>
+        <span>Home</span>
+      </a>
+      <div class="brand">
+        <span>✚</span> CareCall <span>V4</span>
+      </div>
     </div>
     <div class="status-pill">
       <span class="status-dot"></span>
-      System Online
+      ID-Driven Suite
     </div>
   </header>
 
   <main>
-    <div class="eyebrow">Smart Clinic Queue Notifier</div>
-    <h1>Welcome to CareCall V1</h1>
+    <div class="eyebrow">Granular Component-Wise Isolation</div>
+    <h1>Welcome to CareCall V4</h1>
     <p class="lead">
-      Select your role: Widescreen TV Display for waiting areas, touch-first Mobile Keypad for doctors, or Desktop
-      Workstation for reception desks.
+      Select your role: Widescreen Waiting Display, touch-first Doctor Mobile Keypad, or Desktop Doctor Console.
     </p>
 
     <div class="gateway-grid">
-      <!-- 1. TV Display -->
+      <!-- 1. Waiting Display V4 -->
       <a href="/v4/display/" class="card card-tv">
         <div class="card-top">
           <div class="card-icon icon-tv">📺</div>
-          <span class="card-badge badge-tv">Foxsky & Smart TV</span>
+          <span class="card-badge badge-tv">Waiting Area Screen</span>
         </div>
-        <h2 class="card-title">TV Display</h2>
+        <h2 class="card-title">Waiting Display</h2>
         <p class="card-desc">
-          Widescreen 16:9 waiting area display. 50/50 split layout, live elapsed time, and clear Telugu voice
-          announcements.
+          Widescreen 16:9 waiting area display. 50/50 split layout, live elapsed time, and clear Telugu voice announcements.
         </p>
-        <span class="card-cta cta-tv">Launch TV Screen →</span>
+        <span class="card-cta cta-tv">Launch Display Screen →</span>
       </a>
 
-      <!-- 2. Mobile Doctor Keypad -->
-      <a href="/mobile/" class="card card-mobile">
+      <!-- 2. Doctor Mobile V4 -->
+      <a href="/v4/mobile/" class="card card-mobile">
         <div class="card-top">
           <div class="card-icon icon-mobile">📱</div>
           <span class="card-badge badge-mobile">Smartphones & Tablets</span>
         </div>
         <h2 class="card-title">Doctor Mobile</h2>
         <p class="card-desc">
-          Fast, touch-optimized consultation keypad for doctors to call patient tokens directly from their phone.
+          Touch-optimized keypad console with Live TV mirror card, instant recall button, and room key pairing.
         </p>
         <span class="card-cta cta-mobile">Open Mobile Keypad →</span>
       </a>
 
-      <!-- 3. Desktop Workstation -->
-      <a href="/desktop/" class="card card-desktop">
+      <!-- 3. Doctor Console V4 -->
+      <a href="/v4/dr/" class="card card-desktop">
         <div class="card-top">
-          <div class="card-icon icon-desktop">🖥️</div>
-          <span class="card-badge badge-desktop">Consultation Desk</span>
+          <div class="card-icon icon-desktop">🩺</div>
+          <span class="card-badge badge-desktop">Doctor Station V4</span>
         </div>
-        <h2 class="card-title">Desktop Portal</h2>
+        <h2 class="card-title">Doctor Console</h2>
         <p class="card-desc">
-          Dual-panel workstation with keypad and real-time live TV preview mirror for reception and doctor desks.
+          Strictly ID-scoped keypad console with fast token calling, room key pairing, and online presence indicators.
         </p>
-        <span class="card-cta cta-desktop">Open Desktop Console →</span>
+        <span class="card-cta cta-desktop">Launch Doctor Console →</span>
       </a>
     </div>
   </main>
 
   <footer>
-    CareCall V1 Clean Architecture · Built for instant real-time patient queues
+    CareCall V4 · Granular Sections & Meaningful ID Scoping
   </footer>
 </body>
 

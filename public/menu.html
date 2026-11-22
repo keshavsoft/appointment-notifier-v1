@@ -24,6 +24,36 @@
       background: rgba(15, 23, 42, 0.85);
       border-bottom: 1px solid rgba(56, 189, 248, 0.2);
     }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 999px;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      color: #38bdf8;
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      transform: translateX(-2px);
+    }
+    .back-arrow {
+      font-size: 1rem;
+      line-height: 1;
+    }
     .brand { font-size: 1.25rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
     .brand span { color: #34d399; }
     .status-pill {
@@ -106,8 +136,14 @@
 </head>
 <body>
   <header>
-    <div class="brand">
-      <span>✚</span> CareCall <span>V1</span>
+    <div class="header-left">
+      <a href="/" class="back-btn" title="Back to Home">
+        <span class="back-arrow">←</span>
+        <span>Home</span>
+      </a>
+      <div class="brand">
+        <span>✚</span> CareCall <span>V1</span>
+      </div>
     </div>
     <div class="status-pill">
       <span class="status-dot"></span>

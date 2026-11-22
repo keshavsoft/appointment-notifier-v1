@@ -18,7 +18,12 @@
   font-size: 1.35rem;
   font-weight: 800;
 }
-#btnChangeKey {
+#drHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#btnChangeKey, #drBackLink {
   background: rgba(30, 41, 59, 0.9);
   border: 1px solid rgba(56, 189, 248, 0.4);
   border-radius: 999px;
@@ -30,5 +35,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  text-decoration: none;
 }
-#btnChangeKey:active { transform: scale(0.96); }
+#btnChangeKey:active, #drBackLink:active { transform: scale(0.96); }
+#drBackLink:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+}
