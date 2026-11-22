@@ -48,6 +48,7 @@ const server = http.createServer((req, res) => {
   else if (path === "/v4" || path === "/v4/") req.url = "/v4/index.html";
   else if (path === "/v4/dr" || path === "/v4/dr/") req.url = "/v4/dr/index.html";
   else if (path === "/v4/display" || path === "/v4/display/") req.url = "/v4/display/index.html";
+  else if (path === "/v4/mobile" || path === "/v4/mobile/") req.url = "/v4/mobile/index.html";
   else if (path === "/tv" || path === "/tv/") req.url = "/tv/index.html";
   else if (path === "/mobile" || path === "/mobile/") req.url = "/mobile/index.html";
   else if (path === "/desktop" || path === "/desktop/") req.url = "/desktop/index.html";

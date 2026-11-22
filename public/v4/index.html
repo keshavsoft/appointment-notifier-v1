@@ -43,12 +43,9 @@
     p.lead { color: #94a3b8; font-size: 1.05rem; max-width: 600px; margin: 0 0 36px; line-height: 1.5; }
     .gateway-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 24px;
       width: 100%;
-    }
-    @media (max-width: 700px) {
-      .gateway-grid { grid-template-columns: 1fr; }
     }
     .card {
       text-decoration: none; color: inherit;
@@ -130,6 +127,18 @@
           Granular widescreen layout with isolated token typography and decoupled info card widgets.
         </p>
         <span class="card-cta cta-display">Launch Display Screen V4 →</span>
+      </a>
+
+      <a href="/v4/mobile/" class="card card-mobile">
+        <div class="card-top">
+          <div class="card-icon icon-mobile" style="background: rgba(52, 211, 153, 0.2);">📱</div>
+          <span class="card-badge badge-mobile" style="background: rgba(52, 211, 153, 0.2); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.4);">Mobile Station V4</span>
+        </div>
+        <h2 class="card-title">Doctor Mobile</h2>
+        <p class="card-desc">
+          Live TV mirror card with instant recall button and modular touch-optimized keypad dialer.
+        </p>
+        <span class="card-cta cta-mobile" style="color: #34d399;">Launch Mobile Console V4 →</span>
       </a>
     </div>
   </main>
